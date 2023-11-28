@@ -23,17 +23,18 @@ STR_DEBUG_FILE_FORMAT = (
 
 STR_ERROR_FILE_FORMAT = STR_DEBUG_FILE_FORMAT
 # stdout msg formats
-STR_DEBUG_FORMAT = '[%(levelname)s] %(message)s'
-STR_INFO_FORMAT = '%(message)s'
-STR_WARNING_FORMAT = '[%(levelname)s] %(message)s'
+STR_DEBUG_FORMAT = "[%(levelname)s] %(message)s"
+STR_INFO_FORMAT = "%(message)s"
+STR_WARNING_FORMAT = "[%(levelname)s] %(message)s"
 STR_ERROR_FORMAT = (
-    '[%(levelname)s: %(asctime)s:%(filename)s:'
-    '%(name)s:%(funcName)s:%(lineno)d] %(message)s')
+    "[%(levelname)s: %(asctime)s:%(filename)s:"
+    "%(name)s:%(funcName)s:%(lineno)d] %(message)s"
+)
 
 
-class OnlyLowerLevelFilter():
-    """Define filter to show only logs with level lower than given level
-    """
+class OnlyLowerLevelFilter:
+    """Define filter to show only logs with level lower than given level"""
+
     def __init__(self, level):
         self.level = level
 
@@ -43,10 +44,10 @@ class OnlyLowerLevelFilter():
 
 
 def initialize_project_logger(
-        name,
-        path_dir_where_to_store_logs="",
-        is_stdout_debug=False,
-        is_to_propagate_to_root_logger=False,
+    name,
+    path_dir_where_to_store_logs="",
+    is_stdout_debug=False,
+    is_to_propagate_to_root_logger=False,
 ):
     """function returns a perfectly set up logger for the new package"""
     logger_obj = logging.getLogger(name)
@@ -54,7 +55,7 @@ def initialize_project_logger(
     if logger_obj.handlers:
         return logger_obj
     # Create and set basic settings for logger
-    logger_obj.setLevel(20-int(is_stdout_debug)*10)
+    logger_obj.setLevel(20 - int(is_stdout_debug) * 10)
     logger_obj.propagate = is_to_propagate_to_root_logger
     # If root logger has not been set
     # Or user don't know what is logging at all
@@ -103,20 +104,15 @@ def initialize_project_logger(
         os.makedirs(str_path_to_logs_dir)
     # 2.1) Debug handler
     debug_file_handler = logging.handlers.RotatingFileHandler(
-        os.path.join(str_path_to_logs_dir, "debug.log"),
-        maxBytes=10000,
-        backupCount=1
+        os.path.join(str_path_to_logs_dir, "debug.log"), maxBytes=10000, backupCount=1
     )
     debug_file_handler.setLevel(level=0)
     debug_file_handler.setFormatter(logging.Formatter(STR_DEBUG_FILE_FORMAT))
     logger_obj.addHandler(debug_file_handler)
     # 2.1) Warnings and above handler
     warnings_file_handler = logging.handlers.RotatingFileHandler(
-        os.path.join(str_path_to_logs_dir, "errors.log"),
-        maxBytes=10000,
-        backupCount=1
+        os.path.join(str_path_to_logs_dir, "errors.log"), maxBytes=10000, backupCount=1
     )
     warnings_file_handler.setLevel(level=30)
-    warnings_file_handler.setFormatter(
-        logging.Formatter(STR_ERROR_FILE_FORMAT))
+    warnings_file_handler.setFormatter(logging.Formatter(STR_ERROR_FILE_FORMAT))
     logger_obj.addHandler(warnings_file_handler)
